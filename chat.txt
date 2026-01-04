@@ -1,9 +1,9 @@
 - A: me
+#30/12/2025
 UI: 15 days, Price: 35,000
 API Integration: 7 days, Testing and Feedback: 8 days, Price: 15,000
-
 Pure React Native
-
+#02/01/2026
 The UI will be ready by January 16th.
 
-B:
+- B:
