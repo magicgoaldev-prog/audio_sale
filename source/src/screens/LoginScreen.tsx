@@ -4,10 +4,10 @@ import {
   Platform,
   Pressable,
   StyleSheet,
-  Text,
-  TextInput,
   View,
 } from 'react-native';
+import { Text } from '../components/common/Text';
+import { TextInput } from '../components/common/TextInput';
 
 export function LoginScreen() {
   const [email, setEmail] = useState('');

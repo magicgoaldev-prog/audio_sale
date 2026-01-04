@@ -1,12 +1,28 @@
 import React from 'react';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Text } from '../components/common/Text';
 
 export function SplashScreen() {
+  const insets = useSafeAreaInsets();
+
   return (
     <View style={styles.container}>
-      <Text style={styles.brand}>AudioSale</Text>
-      <Text style={styles.subtitle}>Loading...</Text>
-      <ActivityIndicator size="large" />
+      <Image
+        source={require('../assets/images/logo.png')}
+        style={[styles.logo, { top: insets.top + 38 }]}
+        resizeMode="contain"
+      />
+      <Image
+        source={require('../assets/images/load.png')}
+        style={styles.loadImage}
+        resizeMode="contain"
+      />
+      <Text
+        style={[styles.subtitle, { bottom: insets.bottom + 24 }]}
+      >
+        Психология{'\n'}Нового Времени
+      </Text>
     </View>
   );
 }
@@ -14,20 +30,28 @@ export function SplashScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#CC0000',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 12,
-    backgroundColor: '#0B1220',
   },
-  brand: {
-    fontSize: 34,
-    fontWeight: '700',
-    letterSpacing: 0.5,
-    color: '#FFFFFF',
+  logo: {
+    width: 123,
+    height: 30,
+    position: 'absolute',
+  },
+  loadImage: {
+    width: 148,
+    height: 148,
   },
   subtitle: {
-    fontSize: 14,
-    color: '#A7B0C0',
+    position: 'absolute',
+    fontSize: 24,
+    fontWeight: 'bold',
+    fontStyle: 'italic',
+    letterSpacing: -0.41,
+    lineHeight: 28.8,
+    color: '#F5E6E6',
+    textAlign: 'center',
   },
 });
 
