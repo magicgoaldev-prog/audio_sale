@@ -1,4 +1,4 @@
-A: me
+- A: me
 UI: 15 days, Price: 35,000
 API Integration: 7 days, Testing and Feedback: 8 days, Price: 15,000
 
