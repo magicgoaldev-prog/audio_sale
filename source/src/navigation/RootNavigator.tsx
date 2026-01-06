@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { LoginScreen } from '../screens/auth/LoginScreen';
 import { SplashScreen } from '../screens/SplashScreen';
 import { SmsVerificationScreen } from '../screens/auth/SmsVerificationScreen';
+import { RegisterScreen } from '../screens/auth/RegisterScreen';
 
-type RouteName = 'Splash' | 'Login' | 'SmsVerification';
+type RouteName = 'Splash' | 'Login' | 'Register' | 'SmsVerification';
 
 export function RootNavigator(props: { splashDurationMs?: number }) {
   const { splashDurationMs = 1200 } = props;
@@ -27,6 +28,10 @@ export function RootNavigator(props: { splashDurationMs?: number }) {
     setRoute('Login');
   };
 
+  const navigateToRegister = () => {
+    setRoute('Register');
+  };
+
   if (route === 'Splash') {
     return <SplashScreen />;
   }
@@ -43,7 +48,22 @@ export function RootNavigator(props: { splashDurationMs?: number }) {
     );
   }
 
-  return <LoginScreen onContinue={navigateToSmsVerification} />;
+  if (route === 'Register') {
+    return (
+      <RegisterScreen
+        onBack={navigateBack}
+        onLoginPress={navigateBack}
+        onContinue={(data) => navigateToSmsVerification(data.phoneNumber)}
+      />
+    );
+  }
+
+  return (
+    <LoginScreen
+      onContinue={navigateToSmsVerification}
+      onRegisterPress={navigateToRegister}
+    />
+  );
 }
 
 

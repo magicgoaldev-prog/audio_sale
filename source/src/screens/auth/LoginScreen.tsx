@@ -1,20 +1,19 @@
 import React, { useState } from 'react';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
-import { colorPrimary, colorTextPrimary, colorTextSecondary, colorTextPlaceholder, colorShadow, colorBackground, colorBorder } from '../../constants/colors';
+import { colorPrimary, colorTextPrimary, colorTextSecondary, colorShadow, colorBackground, colorBorder } from '../../constants/colors';
 import { Text } from '../../components/common/Text';
-import { TextInput } from '../../components/common/TextInput';
+import { PhoneInput } from '../../components/common/PhoneInput';
 
 interface LoginScreenProps {
   onContinue?: (phoneNumber: string) => void;
+  onRegisterPress?: () => void;
 }
 
-export function LoginScreen({ onContinue }: LoginScreenProps) {
+export function LoginScreen({ onContinue, onRegisterPress }: LoginScreenProps) {
   const [phoneNumber, setPhoneNumber] = useState('');
 
   const handlePhoneChange = (text: string) => {
-    // Allow only numbers and phone format characters
-    const cleaned = text.replace(/[^\d+()\s-]/g, '');
-    setPhoneNumber(cleaned);
+    setPhoneNumber(text);
   };
 
   const handleContinue = () => {
@@ -40,7 +39,7 @@ export function LoginScreen({ onContinue }: LoginScreenProps) {
         {/* Header */}
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Вход</Text>
-          <Pressable style={styles.registrationButton}>
+          <Pressable style={styles.registrationButton} onPress={onRegisterPress}>
             <Image
               source={require('../../assets/images/register_3x.png')}
               style={styles.registrationIcon}
@@ -50,27 +49,9 @@ export function LoginScreen({ onContinue }: LoginScreenProps) {
           </Pressable>
         </View>
 
-        {/* Form Field */}
         <View style={styles.formField}>
           <Text style={styles.label}>Номер телефона</Text>
-          <View style={styles.inputContainer}>
-            <Image
-              source={require('../../assets/images/phone_3x.png')}
-              style={styles.phoneIcon}
-              resizeMode="contain"
-            />
-            <TextInput
-              style={[styles.input, { color: colorTextPrimary }]}
-              value={phoneNumber}
-              onChangeText={handlePhoneChange}
-              placeholder="+ 7 (999) 999-99-99"
-              placeholderTextColor={colorTextPlaceholder}
-              keyboardType="phone-pad"
-              maxLength={20}
-              // selectionColor={colorTextPrimary}
-              autoCorrect={false}
-            />
-          </View>
+          <PhoneInput value={phoneNumber} onChangeText={handlePhoneChange} />
         </View>
 
         {/* Button */}
@@ -174,40 +155,6 @@ const styles = StyleSheet.create({
     letterSpacing: -0.408,
     color: colorTextSecondary,
     textAlign: 'left',
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 16,
-    gap: 10,
-    width: '100%',
-    height: 54,
-    backgroundColor: colorBackground,
-    borderWidth: 1,
-    borderColor: colorBorder,
-    borderRadius: 13,
-    shadowColor: colorShadow,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 1,
-    shadowRadius: 8,
-    elevation: 4,
-  },
-  phoneIcon: {
-    width: 14,
-    height: 14,
-  },
-  input: {
-    flex: 1,
-    fontSize: 16,
-    fontWeight: '400',
-    lineHeight: 22,
-    letterSpacing: -0.408,
-    color: colorTextPrimary,
-    padding: 0,
-    margin: 0,
   },
   button: {
     width: '100%',
