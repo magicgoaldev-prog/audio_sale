@@ -62,7 +62,7 @@ export function RegisterScreen({ onContinue, onBack, onLoginPress }: RegisterScr
             <Text style={styles.headerTitle}>Регистрация</Text>
             <Pressable style={styles.registrationButton} onPress={onLoginPress}>
               <Image
-                source={require('../../assets/images/register_3x.png')}
+                source={require('../../assets/images/login_3x.png')}
                 style={styles.registrationIcon}
                 resizeMode="contain"
               />
