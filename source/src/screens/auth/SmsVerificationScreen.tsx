@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Image, Pressable, StyleSheet, View, TextInput } from 'react-native';
-import { colorPrimary, colorTextPrimary, colorTextSecondary, colorTextPlaceholder, colorShadow, colorBackground, colorBorder } from '../../constants/colors';
+import { colorPrimary, colorTextPrimary, colorTextSecondary, colorShadow, colorBackground, colorBorder } from '../../constants/colors';
 import { Text } from '../../components/common/Text';
+import { useI18n } from '../../i18n';
 
 interface SmsVerificationScreenProps {
   phoneNumber?: string;
@@ -13,6 +14,7 @@ export function SmsVerificationScreen({ phoneNumber = '+7 (999) 999-99-99', onBa
   const [code, setCode] = useState(['', '', '', '']);
   const [timer, setTimer] = useState(45);
   const inputRefs = useRef<(TextInput | null)[]>([]);
+  const { t, language } = useI18n();
 
   useEffect(() => {
     if (timer > 0) {
@@ -82,24 +84,24 @@ export function SmsVerificationScreen({ phoneNumber = '+7 (999) 999-99-99', onBa
         </View>
 
         {/* Title */}
-        <Text style={styles.title}>Введите код из СМС</Text>
+        <Text style={styles.title}>{t('sms.title')}</Text>
 
         {/* Card */}
         <View style={styles.card}>
           {/* Header */}
           <View style={styles.header}>
-            <Text style={styles.headerTitle}>Вход</Text>
+            <Text style={styles.headerTitle}>{t('auth.login')}</Text>
           </View>
 
           {/* Phone number text */}
           <Text style={styles.phoneText}>
-            Отправили секретный код на номер{'\n'}+7 (999) 999-99-99
+            {t('sms.sent', { phone: phoneNumber })}
           </Text>
 
           {/* Code input section */}
           <View style={styles.codeSection}>
             <View style={styles.codeInputContainer}>
-              <Text style={styles.codeLabel}>Введите код здесь</Text>
+              <Text style={styles.codeLabel}>{t('sms.code.label')}</Text>
               <View style={styles.codeInputs}>
                 {code.map((digit, index) => (
                   <TextInput
@@ -122,11 +124,13 @@ export function SmsVerificationScreen({ phoneNumber = '+7 (999) 999-99-99', onBa
             <View style={styles.resendContainer}>
               <Pressable onPress={handleResend} disabled={timer > 0}>
                 <Text style={[styles.resendText, timer > 0 && styles.resendDisabled]}>
-                  Отправить повторно
+                  {t('sms.resend')}
                 </Text>
               </Pressable>
               {timer > 0 && (
-                <Text style={styles.timerText}>({timer}с)</Text>
+                <Text style={styles.timerText}>
+                  ({timer}{language === 'ru' ? 'с' : 's'})
+                </Text>
               )}
             </View>
           </View>
@@ -137,13 +141,13 @@ export function SmsVerificationScreen({ phoneNumber = '+7 (999) 999-99-99', onBa
               style={[styles.button, styles.confirmButton]}
               onPress={handleConfirm}
             >
-              <Text style={styles.confirmButtonText}>Подтвердить</Text>
+              <Text style={styles.confirmButtonText}>{t('sms.confirm')}</Text>
             </Pressable>
             <Pressable
               style={[styles.button, styles.backButton]}
               onPress={onBack}
             >
-              <Text style={styles.backButtonText}>Назад</Text>
+              <Text style={styles.backButtonText}>{t('common.back')}</Text>
             </Pressable>
           </View>
         </View>

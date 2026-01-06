@@ -5,6 +5,7 @@ import { Text } from '../../components/common/Text';
 import { PhoneInput } from '../../components/common/PhoneInput';
 import { EmailInput } from '../../components/common/EmailInput';
 import { DatePickerInput } from '../../components/common/DatePickerInput';
+import { useI18n } from '../../i18n';
 
 interface RegisterScreenProps {
   onContinue?: (data: {
@@ -22,6 +23,7 @@ export function RegisterScreen({ onContinue, onBack, onLoginPress }: RegisterScr
   const [email, setEmail] = useState('');
   const [birthDate, setBirthDate] = useState('');
   const [gender, setGender] = useState<'female' | 'male'>('female');
+  const { t } = useI18n();
 
   const handlePhoneChange = (text: string) => {
     setPhoneNumber(text);
@@ -46,9 +48,7 @@ export function RegisterScreen({ onContinue, onBack, onLoginPress }: RegisterScr
           style={styles.logo}
           resizeMode="contain"
         />
-        <Text style={styles.subtitle}>
-          Зарегистрируйтесь{'\n'}или войдите в аккаунт
-        </Text>
+        <Text style={styles.subtitle}>{t('auth.subtitle')}</Text>
 
         <View style={styles.card}>
           <View style={styles.header}>
@@ -59,34 +59,34 @@ export function RegisterScreen({ onContinue, onBack, onLoginPress }: RegisterScr
                 resizeMode="contain"
               />
             </Pressable>
-            <Text style={styles.headerTitle}>Регистрация</Text>
+            <Text style={styles.headerTitle}>{t('auth.register')}</Text>
             <Pressable style={styles.registrationButton} onPress={onLoginPress}>
               <Image
                 source={require('../../assets/images/register_3x.png')}
                 style={styles.registrationIcon}
                 resizeMode="contain"
               />
-              <Text style={styles.registrationText}>Вход</Text>
+              <Text style={styles.registrationText}>{t('auth.login')}</Text>
             </Pressable>
           </View>
 
           <View style={styles.formField}>
-            <Text style={styles.label}>Номер телефона</Text>
+            <Text style={styles.label}>{t('auth.phone')}</Text>
           <PhoneInput value={phoneNumber} onChangeText={handlePhoneChange} />
           </View>
 
           <View style={styles.formField}>
-            <Text style={styles.label}>Электронная почта</Text>
-          <EmailInput value={email} onChangeText={setEmail} />
+            <Text style={styles.label}>{t('auth.email')}</Text>
+          <EmailInput value={email} onChangeText={setEmail} placeholder={t('auth.email.placeholder')} />
           </View>
 
           <View style={styles.formField}>
-            <Text style={styles.label}>Дата рождения</Text>
-          <DatePickerInput value={birthDate} onChange={setBirthDate} />
+            <Text style={styles.label}>{t('auth.birthdate')}</Text>
+          <DatePickerInput value={birthDate} onChange={setBirthDate} placeholder={t('auth.birthdate.placeholder')} />
           </View>
 
           <View style={styles.formField}>
-            <Text style={styles.label}>Пол</Text>
+            <Text style={styles.label}>{t('auth.gender')}</Text>
             <View style={styles.genderRow}>
               <Pressable
                 style={[styles.genderButton, gender === 'female' && styles.genderButtonSelected]}
@@ -107,7 +107,7 @@ export function RegisterScreen({ onContinue, onBack, onLoginPress }: RegisterScr
                     gender === 'female' && styles.genderTextSelected,
                   ]}
                 >
-                  Женский
+                  {t('auth.gender.female')}
                 </Text>
               </Pressable>
 
@@ -130,14 +130,14 @@ export function RegisterScreen({ onContinue, onBack, onLoginPress }: RegisterScr
                     gender === 'male' && styles.genderTextSelected,
                   ]}
                 >
-                  Мужской
+                  {t('auth.gender.male')}
                 </Text>
               </Pressable>
             </View>
           </View>
 
           <Pressable style={styles.button} onPress={handleContinue}>
-            <Text style={styles.buttonText}>Продолжить</Text>
+            <Text style={styles.buttonText}>{t('common.continue')}</Text>
           </Pressable>
         </View>
       </View>
@@ -168,6 +168,9 @@ const styles = StyleSheet.create({
     letterSpacing: -0.41,
     color: '#F5E6E6',
     textAlign: 'center',
+  },
+  languageWrapper: {
+    alignSelf: 'flex-end',
   },
   card: {
     alignSelf: 'stretch',

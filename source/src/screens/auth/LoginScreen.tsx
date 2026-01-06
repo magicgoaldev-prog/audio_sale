@@ -3,6 +3,7 @@ import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { colorPrimary, colorTextPrimary, colorTextSecondary, colorShadow, colorBackground, colorBorder } from '../../constants/colors';
 import { Text } from '../../components/common/Text';
 import { PhoneInput } from '../../components/common/PhoneInput';
+import { useI18n } from '../../i18n';
 
 interface LoginScreenProps {
   onContinue?: (phoneNumber: string) => void;
@@ -11,6 +12,7 @@ interface LoginScreenProps {
 
 export function LoginScreen({ onContinue, onRegisterPress }: LoginScreenProps) {
   const [phoneNumber, setPhoneNumber] = useState('');
+  const { t } = useI18n();
 
   const handlePhoneChange = (text: string) => {
     setPhoneNumber(text);
@@ -30,33 +32,31 @@ export function LoginScreen({ onContinue, onRegisterPress }: LoginScreenProps) {
           style={styles.logo}
           resizeMode="contain"
         />
-        <Text style={styles.subtitle}>
-          Зарегистрируйтесь{'\n'}или войдите в аккаунт
-        </Text>
+        <Text style={styles.subtitle}>{t('auth.subtitle')}</Text>
         
         {/* Card Container */}
         <View style={styles.card}>
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>Вход</Text>
+          <Text style={styles.headerTitle}>{t('auth.login')}</Text>
           <Pressable style={styles.registrationButton} onPress={onRegisterPress}>
             <Image
               source={require('../../assets/images/register_3x.png')}
               style={styles.registrationIcon}
               resizeMode="contain"
             />
-            <Text style={styles.registrationText}>Регистрация</Text>
+            <Text style={styles.registrationText}>{t('auth.register')}</Text>
           </Pressable>
         </View>
 
         <View style={styles.formField}>
-          <Text style={styles.label}>Номер телефона</Text>
+          <Text style={styles.label}>{t('auth.phone')}</Text>
           <PhoneInput value={phoneNumber} onChangeText={handlePhoneChange} />
         </View>
 
         {/* Button */}
         <Pressable style={styles.button} onPress={handleContinue}>
-          <Text style={styles.buttonText}>Продолжить</Text>
+          <Text style={styles.buttonText}>{t('common.continue')}</Text>
         </Pressable>
         </View>
       </View>
