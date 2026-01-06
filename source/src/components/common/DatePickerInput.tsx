@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { Image, Modal, Pressable, StyleSheet, View } from 'react-native';
 import { colorBackground, colorBorder, colorPrimary, colorShadow, colorTextPlaceholder, colorTextPrimary, colorTextSecondary } from '../../constants/colors';
 import { Text } from './Text';
+import { Language, useI18n } from '../../i18n';
 
 export interface DatePickerInputProps {
   value: string;
@@ -15,22 +16,15 @@ type CalendarCell = {
   monthOffset: -1 | 0 | 1;
 };
 
-const MONTH_NAMES = [
-  'Январь',
-  'Февраль',
-  'Март',
-  'Апрель',
-  'Май',
-  'Июнь',
-  'Июль',
-  'Август',
-  'Сентябрь',
-  'Октябрь',
-  'Ноябрь',
-  'Декабрь',
-];
+const MONTH_NAMES: Record<Language, string[]> = {
+  ru: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+  en: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+};
 
-const WEEK_DAYS = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+const WEEK_DAYS: Record<Language, string[]> = {
+  ru: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'],
+  en: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+};
 
 const formatDate = (date: Date) => {
   const day = `${date.getDate()}`.padStart(2, '0');
@@ -86,6 +80,7 @@ const buildCalendar = (date: Date): CalendarCell[] => {
 };
 
 export function DatePickerInput({ value, onChange, placeholder = '14.01.1999' }: DatePickerInputProps) {
+  const { language } = useI18n();
   const initial = parseDate(value) ?? new Date();
   const [visible, setVisible] = useState(false);
   const [cursorDate, setCursorDate] = useState<Date>(initial);
@@ -137,8 +132,8 @@ export function DatePickerInput({ value, onChange, placeholder = '14.01.1999' }:
               <Pressable style={styles.navButton} onPress={goToPrevMonth}>
                 <Text style={styles.navText}>{'<'}</Text>
               </Pressable>
-              <Text style={styles.monthLabel}>
-                {MONTH_NAMES[cursorDate.getMonth()]} {cursorDate.getFullYear()}
+            <Text style={styles.monthLabel}>
+                {MONTH_NAMES[language][cursorDate.getMonth()]} {cursorDate.getFullYear()}
               </Text>
               <Pressable style={styles.navButton} onPress={goToNextMonth}>
                 <Text style={styles.navText}>{'>'}</Text>
@@ -146,7 +141,7 @@ export function DatePickerInput({ value, onChange, placeholder = '14.01.1999' }:
             </View>
 
             <View style={styles.weekRow}>
-              {WEEK_DAYS.map((day) => (
+              {WEEK_DAYS[language].map((day) => (
                 <Text key={day} style={styles.weekDay}>
                   {day}
                 </Text>
