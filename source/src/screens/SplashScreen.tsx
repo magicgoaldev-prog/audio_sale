@@ -2,6 +2,7 @@ import React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Text } from '../components/common/Text';
+import { colorPrimary } from '../constants/colors';
 
 export function SplashScreen() {
   const insets = useSafeAreaInsets();
@@ -30,7 +31,7 @@ export function SplashScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#CC0000',
+    backgroundColor: colorPrimary,
     alignItems: 'center',
     justifyContent: 'center',
   },

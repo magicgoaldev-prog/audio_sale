@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Image, Modal, Pressable, StyleSheet, View, TextInput } from 'react-native';
 import { colorPrimary, colorTextPrimary, colorTextSecondary, colorShadow, colorBackground, colorBorder } from '../../constants/colors';
 import { Text } from '../../components/common/Text';
+import { ButtonRed } from '../../components/common/ButtonRed';
+import { ButtonWhite } from '../../components/common/ButtonWhite';
 import { useI18n } from '../../i18n';
 
 interface SmsVerificationScreenProps {
@@ -90,8 +92,19 @@ export function SmsVerificationScreen({
     }
     if (origin === 'register') {
       setShowSuccess(true);
+    } else {
+      // Login: navigate directly without success popup
+      if (onConfirm) {
+        onConfirm();
+      }
     }
-    handleConfirm();
+  };
+
+  const handleSuccessButtonPress = () => {
+    setShowSuccess(false);
+    if (onConfirm) {
+      onConfirm();
+    }
   };
 
   return (
@@ -164,18 +177,8 @@ export function SmsVerificationScreen({
 
           {/* Buttons */}
           <View style={styles.buttonsContainer}>
-              <Pressable
-                style={[styles.button, styles.confirmButton]}
-                onPress={handleConfirmWithSuccess}
-              >
-              <Text style={styles.confirmButtonText}>{t('sms.confirm')}</Text>
-            </Pressable>
-            <Pressable
-              style={[styles.button, styles.backButton]}
-              onPress={onBack}
-            >
-              <Text style={styles.backButtonText}>{t('common.back')}</Text>
-            </Pressable>
+            <ButtonRed text={t('sms.confirm')} onPress={handleConfirmWithSuccess} />
+            <ButtonWhite text={t('common.back')} onPress={onBack} />
           </View>
         </View>
       </View>
@@ -184,9 +187,9 @@ export function SmsVerificationScreen({
           <View style={styles.successCard}>
             <Text style={styles.successTitle}>{t('sms.success.title')}</Text>
             <Text style={styles.successSubtitle}>{t('sms.success.subtitle')}</Text>
-            <Pressable style={styles.successButton} onPress={() => setShowSuccess(false)}>
-              <Text style={styles.successButtonText}>{t('sms.success.button')}</Text>
-            </Pressable>
+            <View style={styles.successButtonContainer}>
+              <ButtonRed text={t('sms.success.button')} onPress={handleSuccessButtonPress} />
+            </View>
           </View>
         </View>
       </Modal>
@@ -343,39 +346,6 @@ const styles = StyleSheet.create({
     width: '100%',
     gap: 10,
   },
-  button: {
-    width: '100%',
-    height: 46,
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 30,
-  },
-  confirmButton: {
-    backgroundColor: colorPrimary,
-  },
-  confirmButtonText: {
-    fontSize: 16,
-    fontWeight: '400',
-    lineHeight: 22,
-    letterSpacing: -0.408,
-    color: '#FFFFFF',
-    textAlign: 'center',
-  },
-  backButton: {
-    backgroundColor: 'transparent',
-    borderWidth: 1,
-    borderColor: colorPrimary,
-  },
-  backButtonText: {
-    fontSize: 16,
-    fontWeight: '400',
-    lineHeight: 22,
-    letterSpacing: -0.408,
-    color: colorPrimary,
-    textAlign: 'center',
-  },
   successOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.35)',
@@ -410,19 +380,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 20,
   },
-  successButton: {
+  successButtonContainer: {
     marginTop: 8,
     width: '100%',
-    height: 46,
-    backgroundColor: colorPrimary,
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  successButtonText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#FFFFFF',
   },
 });
 

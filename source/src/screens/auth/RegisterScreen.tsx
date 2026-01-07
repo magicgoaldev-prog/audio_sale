@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
-import { Image, Pressable, StyleSheet, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { BackHandler, Image, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colorBackground, colorBorder, colorPrimary, colorShadow, colorTextPrimary, colorTextSecondary } from '../../constants/colors';
 import { Text } from '../../components/common/Text';
 import { PhoneInput } from '../../components/common/PhoneInput';
 import { EmailInput } from '../../components/common/EmailInput';
 import { DatePickerInput } from '../../components/common/DatePickerInput';
+import { ButtonRed } from '../../components/common/ButtonRed';
 import { useI18n } from '../../i18n';
 
 interface RegisterScreenProps {
@@ -24,6 +26,19 @@ export function RegisterScreen({ onContinue, onBack, onLoginPress }: RegisterScr
   const [birthDate, setBirthDate] = useState('');
   const [gender, setGender] = useState<'female' | 'male'>('female');
   const { t } = useI18n();
+  const insets = useSafeAreaInsets();
+
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      if (onBack) {
+        onBack();
+        return true;
+      }
+      return false;
+    });
+
+    return () => backHandler.remove();
+  }, [onBack]);
 
   const handlePhoneChange = (text: string) => {
     setPhoneNumber(text);
@@ -42,15 +57,27 @@ export function RegisterScreen({ onContinue, onBack, onLoginPress }: RegisterScr
 
   return (
     <View style={styles.container}>
-      <View style={styles.contentContainer}>
-        <Image
-          source={require('../../assets/images/logo_red.png')}
-          style={styles.logo}
-          resizeMode="contain"
-        />
-        <Text style={styles.subtitle}>{t('auth.subtitle')}</Text>
+      <View style={[
+        styles.scrollWrapper,
+        {
+          paddingTop: insets.top,
+          paddingBottom: insets.bottom,
+        },
+      ]}>
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+        >
+          <View style={styles.contentContainer}>
+          <Image
+            source={require('../../assets/images/logo_red.png')}
+            style={styles.logo}
+            resizeMode="contain"
+          />
+          <Text style={styles.subtitle}>{t('auth.subtitle')}</Text>
 
-        <View style={styles.card}>
+          <View style={styles.card}>
           <View style={styles.header}>
             <View style={styles.headerLeft}>
               <Pressable style={styles.backButton} onPress={onBack}>
@@ -138,10 +165,10 @@ export function RegisterScreen({ onContinue, onBack, onLoginPress }: RegisterScr
             </View>
           </View>
 
-          <Pressable style={styles.button} onPress={handleContinue}>
-            <Text style={styles.buttonText}>{t('common.continue')}</Text>
-          </Pressable>
+          <ButtonRed text={t('common.continue')} onPress={handleContinue} />
         </View>
+        </View>
+        </ScrollView>
       </View>
     </View>
   );
@@ -151,13 +178,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colorPrimary,
+  },
+  scrollWrapper: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    paddingVertical: 20,
+    minHeight: '100%',
   },
   contentContainer: {
     alignItems: 'center',
     gap: 24,
-    marginTop: -60,
+    width: '100%',
   },
   logo: {
     width: 115,
@@ -312,23 +347,5 @@ const styles = StyleSheet.create({
   },
   genderTextSelected: {
     color: colorTextPrimary,
-  },
-  button: {
-    width: '100%',
-    height: 46,
-    backgroundColor: colorPrimary,
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 30,
-  },
-  buttonText: {
-    fontSize: 16,
-    fontWeight: '400',
-    lineHeight: 22,
-    letterSpacing: -0.408,
-    color: '#FFFFFF',
-    textAlign: 'center',
   },
 });

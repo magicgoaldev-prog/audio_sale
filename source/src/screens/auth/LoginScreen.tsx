@@ -3,6 +3,7 @@ import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { colorPrimary, colorTextPrimary, colorTextSecondary, colorShadow, colorBackground, colorBorder } from '../../constants/colors';
 import { Text } from '../../components/common/Text';
 import { PhoneInput } from '../../components/common/PhoneInput';
+import { ButtonRed } from '../../components/common/ButtonRed';
 import { useI18n } from '../../i18n';
 
 interface LoginScreenProps {
@@ -55,9 +56,7 @@ export function LoginScreen({ onContinue, onRegisterPress }: LoginScreenProps) {
         </View>
 
         {/* Button */}
-        <Pressable style={styles.button} onPress={handleContinue}>
-          <Text style={styles.buttonText}>{t('common.continue')}</Text>
-        </Pressable>
+        <ButtonRed text={t('common.continue')} onPress={handleContinue} />
         </View>
       </View>
     </View>
@@ -155,24 +154,6 @@ const styles = StyleSheet.create({
     letterSpacing: -0.408,
     color: colorTextSecondary,
     textAlign: 'left',
-  },
-  button: {
-    width: '100%',
-    height: 46,
-    backgroundColor: colorPrimary,
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 30,
-  },
-  buttonText: {
-    fontSize: 16,
-    fontWeight: '400',
-    lineHeight: 22,
-    letterSpacing: -0.408,
-    color: '#FFFFFF',
-    textAlign: 'center',
   },
 });
 

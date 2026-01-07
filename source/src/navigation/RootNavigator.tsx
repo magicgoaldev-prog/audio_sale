@@ -3,8 +3,9 @@ import { LoginScreen } from '../screens/auth/LoginScreen';
 import { SplashScreen } from '../screens/SplashScreen';
 import { SmsVerificationScreen } from '../screens/auth/SmsVerificationScreen';
 import { RegisterScreen } from '../screens/auth/RegisterScreen';
+import { WelcomeScreen } from '../screens/welcome/WelcomeScreen';
 
-type RouteName = 'Splash' | 'Login' | 'Register' | 'SmsVerification';
+type RouteName = 'Splash' | 'Login' | 'Register' | 'SmsVerification' | 'Welcome';
 
 export function RootNavigator(props: { splashDurationMs?: number }) {
   const { splashDurationMs = 1200 } = props;
@@ -38,8 +39,16 @@ export function RootNavigator(props: { splashDurationMs?: number }) {
     setRoute('Register');
   };
 
+  const navigateToWelcome = () => {
+    setRoute('Welcome');
+  };
+
   if (route === 'Splash') {
     return <SplashScreen />;
+  }
+
+  if (route === 'Welcome') {
+    return <WelcomeScreen />;
   }
 
   if (route === 'SmsVerification') {
@@ -49,7 +58,7 @@ export function RootNavigator(props: { splashDurationMs?: number }) {
         origin={smsSource}
         onBack={navigateBackFromSms}
         onConfirm={() => {
-          // Navigate to next screen after verification
+          navigateToWelcome();
         }}
       />
     );
