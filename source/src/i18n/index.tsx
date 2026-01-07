@@ -30,6 +30,9 @@ const translations: Record<Language, Record<string, string>> = {
     'sms.code.label': 'Введите код здесь',
     'sms.resend': 'Отправить повторно',
     'sms.confirm': 'Подтвердить',
+    'sms.success.title': 'Регистрация завершена!',
+    'sms.success.subtitle': 'Поздравляем, теперь вам доступны все возможности приложения',
+    'sms.success.button': 'Отлично',
   },
   en: {
     'auth.subtitle': 'Sign up\nor log in to your account',
@@ -50,6 +53,9 @@ const translations: Record<Language, Record<string, string>> = {
     'sms.code.label': 'Enter code here',
     'sms.resend': 'Send again',
     'sms.confirm': 'Confirm',
+    'sms.success.title': 'Registration completed!',
+    'sms.success.subtitle': 'Congrats, you now have full access to the app features',
+    'sms.success.button': 'Great',
   },
 };
 

@@ -26,8 +26,12 @@ export function RootNavigator(props: { splashDurationMs?: number }) {
     setRoute('SmsVerification');
   };
 
-  const navigateBack = () => {
+  const navigateBackToLogin = () => {
     setRoute('Login');
+  };
+
+  const navigateBackFromSms = () => {
+    setRoute(smsSource === 'register' ? 'Register' : 'Login');
   };
 
   const navigateToRegister = () => {
@@ -43,7 +47,7 @@ export function RootNavigator(props: { splashDurationMs?: number }) {
       <SmsVerificationScreen
         phoneNumber={phoneNumber}
         origin={smsSource}
-        onBack={navigateBack}
+        onBack={navigateBackFromSms}
         onConfirm={() => {
           // Navigate to next screen after verification
         }}
@@ -54,8 +58,8 @@ export function RootNavigator(props: { splashDurationMs?: number }) {
   if (route === 'Register') {
     return (
       <RegisterScreen
-        onBack={navigateBack}
-        onLoginPress={navigateBack}
+        onBack={navigateBackToLogin}
+        onLoginPress={navigateBackToLogin}
         onContinue={(data) => navigateToSmsVerification(data.phoneNumber, 'register')}
       />
     );

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Image, Pressable, StyleSheet, View, TextInput } from 'react-native';
+import { Image, Modal, Pressable, StyleSheet, View, TextInput } from 'react-native';
 import { colorPrimary, colorTextPrimary, colorTextSecondary, colorShadow, colorBackground, colorBorder } from '../../constants/colors';
 import { Text } from '../../components/common/Text';
 import { useI18n } from '../../i18n';
@@ -21,6 +21,7 @@ export function SmsVerificationScreen({
   const [timer, setTimer] = useState(45);
   const inputRefs = useRef<(TextInput | null)[]>([]);
   const { t, language } = useI18n();
+  const [showSuccess, setShowSuccess] = useState(false);
 
   useEffect(() => {
     if (timer > 0) {
@@ -52,7 +53,7 @@ export function SmsVerificationScreen({
       if (firstEmptyAfter !== -1) {
         inputRefs.current[firstEmptyAfter]?.focus();
       } else if (nextCode.every((v) => v !== '')) {
-        handleConfirm();
+        handleConfirmWithSuccess();
       } else {
         const nextSlot = Math.min(index + numeric.length, 3);
         if (nextCode[nextSlot] === '') {
@@ -80,6 +81,17 @@ export function SmsVerificationScreen({
     if (fullCode.length === 4 && onConfirm) {
       onConfirm();
     }
+  };
+
+  const handleConfirmWithSuccess = () => {
+    const fullCode = code.join('');
+    if (fullCode.length !== 4) {
+      return;
+    }
+    if (origin === 'register') {
+      setShowSuccess(true);
+    }
+    handleConfirm();
   };
 
   return (
@@ -152,10 +164,10 @@ export function SmsVerificationScreen({
 
           {/* Buttons */}
           <View style={styles.buttonsContainer}>
-            <Pressable
-              style={[styles.button, styles.confirmButton]}
-              onPress={handleConfirm}
-            >
+              <Pressable
+                style={[styles.button, styles.confirmButton]}
+                onPress={handleConfirmWithSuccess}
+              >
               <Text style={styles.confirmButtonText}>{t('sms.confirm')}</Text>
             </Pressable>
             <Pressable
@@ -167,6 +179,17 @@ export function SmsVerificationScreen({
           </View>
         </View>
       </View>
+      <Modal visible={showSuccess} transparent animationType="fade">
+        <View style={styles.successOverlay}>
+          <View style={styles.successCard}>
+            <Text style={styles.successTitle}>{t('sms.success.title')}</Text>
+            <Text style={styles.successSubtitle}>{t('sms.success.subtitle')}</Text>
+            <Pressable style={styles.successButton} onPress={() => setShowSuccess(false)}>
+              <Text style={styles.successButtonText}>{t('sms.success.button')}</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -352,6 +375,54 @@ const styles = StyleSheet.create({
     letterSpacing: -0.408,
     color: colorPrimary,
     textAlign: 'center',
+  },
+  successOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.35)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 24,
+  },
+  successCard: {
+    width: '100%',
+    backgroundColor: colorBackground,
+    borderRadius: 24,
+    paddingVertical: 32,
+    paddingHorizontal: 24,
+    alignItems: 'center',
+    gap: 16,
+    shadowColor: colorShadow,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 1,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+  successTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: colorTextPrimary,
+    textAlign: 'center',
+  },
+  successSubtitle: {
+    fontSize: 15,
+    fontWeight: '400',
+    color: colorTextSecondary,
+    textAlign: 'center',
+    lineHeight: 20,
+  },
+  successButton: {
+    marginTop: 8,
+    width: '100%',
+    height: 46,
+    backgroundColor: colorPrimary,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  successButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#FFFFFF',
   },
 });
 
