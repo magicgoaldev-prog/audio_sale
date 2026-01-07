@@ -82,7 +82,7 @@ const translations: Record<Language, Record<string, string>> = {
     'welcome.next': 'Next',
     'welcome.start': 'Start',
     'welcome.start.catalog': 'Go to catalog',
-    'welcome.page1.title': 'Internal support always at hand',
+    'welcome.page1.title': 'Internal support\nalways at hand',
     'welcome.page1.description': 'Audio sessions that will replace a session with a psychologist for you.\nPersonal therapeutic space, available anytime, anywhere',
     'welcome.page2.title': 'Your guide\nto harmony',
     'welcome.page2.description': 'Page 2 Description',

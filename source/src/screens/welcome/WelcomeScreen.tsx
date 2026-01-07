@@ -1,7 +1,26 @@
-import React, { useState } from 'react';
-import { Image, Pressable, ScrollView, StyleSheet, View, Dimensions } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { Image, Pressable, ScrollView, StyleSheet, View, Dimensions, NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { colorPrimary, colorBackground, colorTextPrimary, colorShadow } from '../../constants/colors';
+import {
+  colorPrimary,
+  colorBackground,
+  colorTextPrimary,
+  colorShadow,
+  colorWelcomeTitle,
+  colorWelcomeCategoryText,
+  colorWelcomeDescription,
+  colorWelcomeProfileDescription,
+  colorWelcomeAchievement,
+  colorWelcomeCategoryButton,
+  colorWelcomeCategoryIcon,
+  colorWelcomeIndicatorInactive,
+  colorWelcomeIndicatorActive,
+  colorWelcomeCategoryBorder,
+  colorWelcomeImageShadow,
+  colorWelcomeIconShadow,
+  colorWhite,
+} from '../../constants/colors';
+import { letterSpacing } from '../../constants/fonts';
 import { Text } from '../../components/common/Text';
 import { ButtonRed } from '../../components/common/ButtonRed';
 import { ButtonWhite } from '../../components/common/ButtonWhite';
@@ -25,8 +44,8 @@ function Welcome1({ onNext, onSkip, insets }: { onNext: () => void; onSkip: () =
       fontSize: 24,
       fontWeight: '600',
       lineHeight: 29,
-      letterSpacing: -0.408,
-      color: '#F5E6E6',
+      letterSpacing,
+      color: colorWelcomeTitle,
       textAlign: 'center',
       marginBottom: 18,
     },
@@ -45,7 +64,7 @@ function Welcome1({ onNext, onSkip, insets }: { onNext: () => void; onSkip: () =
       backgroundColor: colorBackground,
       borderRadius: 50,
       zIndex: 1,
-      shadowColor: 'rgba(45, 44, 44, 0.7)',
+      shadowColor: colorWelcomeImageShadow,
       shadowOffset: {
         width: 0,
         height: 0,
@@ -70,8 +89,8 @@ function Welcome1({ onNext, onSkip, insets }: { onNext: () => void; onSkip: () =
       fontSize: 15,
       fontWeight: '400',
       lineHeight: 21,
-      letterSpacing: -0.408,
-      color: '#E2D9D2',
+      letterSpacing,
+      color: colorWelcomeDescription,
       textAlign: 'center',
     },
     buttonsContainer: {
@@ -132,8 +151,8 @@ function Welcome2({ onNext, onSkip, insets }: { onNext: () => void; onSkip: () =
       fontSize: 24,
       fontWeight: '600',
       lineHeight: 29,
-      letterSpacing: -0.408,
-      color: '#F5E6E6',
+      letterSpacing,
+      color: colorWelcomeTitle,
       textAlign: 'center',
     },
     profileCard: {
@@ -199,7 +218,7 @@ function Welcome2({ onNext, onSkip, insets }: { onNext: () => void; onSkip: () =
       fontSize: 16,
       fontWeight: '600',
       lineHeight: 19,
-      letterSpacing: -0.408,
+      letterSpacing,
       color: colorTextPrimary,
     },
     profileDescription: {
@@ -208,8 +227,8 @@ function Welcome2({ onNext, onSkip, insets }: { onNext: () => void; onSkip: () =
       fontSize: 13,
       fontWeight: '400',
       lineHeight: 17,
-      letterSpacing: -0.408,
-      color: '#625950',
+      letterSpacing,
+      color: colorWelcomeProfileDescription,
     },
     achievementsScrollView: {
       alignSelf: 'stretch',
@@ -253,16 +272,16 @@ function Welcome2({ onNext, onSkip, insets }: { onNext: () => void; onSkip: () =
       fontSize: 15,
       fontWeight: '600',
       lineHeight: 21,
-      letterSpacing: -0.408,
-      color: '#ECE3DC',
+      letterSpacing,
+      color: colorWelcomeAchievement,
     },
     achievementText2: {
       flex: 1,
       fontSize: 15,
       fontWeight: '700',
       lineHeight: 21,
-      letterSpacing: -0.408,
-      color: '#ECE3DC',
+      letterSpacing,
+      color: colorWelcomeAchievement,
     },
     buttonsContainer: {
       position: 'absolute',
@@ -374,8 +393,8 @@ function Welcome3({ onNext, insets }: { onNext: () => void; insets: any }) {
       fontSize: 24,
       fontWeight: '600',
       lineHeight: 29,
-      letterSpacing: -0.408,
-      color: '#F5E6E6',
+      letterSpacing,
+      color: colorWelcomeTitle,
       textAlign: 'center',
     },
     introText: {
@@ -384,8 +403,8 @@ function Welcome3({ onNext, insets }: { onNext: () => void; insets: any }) {
       fontSize: 15,
       fontWeight: '400',
       lineHeight: 21,
-      letterSpacing: -0.408,
-      color: '#E2D9D2',
+      letterSpacing,
+      color: colorWelcomeDescription,
       textAlign: 'center',
       marginBottom: 12,
     },
@@ -418,17 +437,17 @@ function Welcome3({ onNext, insets }: { onNext: () => void; insets: any }) {
       paddingTop: 0,
       paddingBottom: 0,
       height: 39,
-      backgroundColor: '#BC0000',
+      backgroundColor: colorWelcomeCategoryButton,
       borderWidth: 1,
-      borderColor: 'rgba(255, 246, 239, 0.7)',
+      borderColor: colorWelcomeCategoryBorder,
       borderRadius: 20,
     },
     categoryText: {
       fontSize: 14,
       fontWeight: '400',
       lineHeight: 20,
-      letterSpacing: -0.408,
-      color: '#F5E7E7',
+      letterSpacing,
+      color: colorWelcomeCategoryText,
       textAlign: 'left',
       flex: 1,
     },
@@ -440,9 +459,9 @@ function Welcome3({ onNext, insets }: { onNext: () => void; insets: any }) {
       gap: 10,
       width: 31,
       height: 31,
-      backgroundColor: '#FFF6EF',
+      backgroundColor: colorWelcomeCategoryIcon,
       borderRadius: 100,
-      shadowColor: 'rgba(0, 0, 0, 0.25)',
+      shadowColor: colorWelcomeIconShadow,
       shadowOffset: {
         width: 0,
         height: 2,
@@ -529,10 +548,14 @@ export function WelcomeScreen() {
   const [currentPage, setCurrentPage] = useState(0);
   const { t } = useI18n();
   const insets = useSafeAreaInsets();
+  const scrollViewRef = useRef<ScrollView>(null);
+  const screenWidth = Dimensions.get('window').width;
 
   const handleNext = () => {
     if (currentPage < 2) {
-      setCurrentPage(currentPage + 1);
+      const nextPage = currentPage + 1;
+      setCurrentPage(nextPage);
+      scrollViewRef.current?.scrollTo({ x: nextPage * screenWidth, animated: true });
     } else {
       // Navigate to next screen (to be implemented)
     }
@@ -540,6 +563,12 @@ export function WelcomeScreen() {
 
   const handleSkip = () => {
     // Navigate to next screen (to be implemented)
+  };
+
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const offsetX = event.nativeEvent.contentOffset.x;
+    const page = Math.round(offsetX / screenWidth);
+    setCurrentPage(page);
   };
 
   const screenHeight = Dimensions.get('window').height;
@@ -568,13 +597,29 @@ export function WelcomeScreen() {
           <View style={[styles.indicator, currentPage === 1 && styles.indicatorActive]} />
           <View style={[styles.indicator, currentPage === 2 && styles.indicatorActive]} />
         </View>
-
-        
       </View>
-      {/* Welcome Content */}
-        {currentPage === 0 && <Welcome1 onNext={handleNext} onSkip={handleSkip} insets={insets} />}
-        {currentPage === 1 && <Welcome2 onNext={handleNext} onSkip={handleSkip} insets={insets} />}
-        {currentPage === 2 && <Welcome3 onNext={handleNext} insets={insets} />}
+
+      {/* Welcome Content - Swipeable */}
+      <ScrollView
+        ref={scrollViewRef}
+        horizontal
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollViewContent}
+      >
+        <View style={[styles.welcomePage, { width: screenWidth }]}>
+          <Welcome1 onNext={handleNext} onSkip={handleSkip} insets={insets} />
+        </View>
+        <View style={[styles.welcomePage, { width: screenWidth }]}>
+          <Welcome2 onNext={handleNext} onSkip={handleSkip} insets={insets} />
+        </View>
+        <View style={[styles.welcomePage, { width: screenWidth }]}>
+          <Welcome3 onNext={handleNext} insets={insets} />
+        </View>
+      </ScrollView>
     </View>
   );
 }
@@ -582,7 +627,7 @@ export function WelcomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colorWhite,
   },
   contentSection: {
     alignSelf: 'stretch',
@@ -592,6 +637,15 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   contentSectionFlex: {
+    flex: 1,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  scrollViewContent: {
+    flexDirection: 'row',
+  },
+  welcomePage: {
     flex: 1,
   },
   logoContainer: {
@@ -614,10 +668,10 @@ const styles = StyleSheet.create({
   indicator: {
     flex: 1,
     height: 4,
-    backgroundColor: '#F56565',
+    backgroundColor: colorWelcomeIndicatorInactive,
     borderRadius: 5,
   },
   indicatorActive: {
-    backgroundColor: '#F5ECE4',
+    backgroundColor: colorWelcomeIndicatorActive,
   },
 });
