@@ -52,14 +52,16 @@ export function RegisterScreen({ onContinue, onBack, onLoginPress }: RegisterScr
 
         <View style={styles.card}>
           <View style={styles.header}>
-            <Pressable style={styles.backButton} onPress={onBack}>
-              <Image
-                source={require('../../assets/images/arrow_left_3x.png')}
-                style={styles.backIcon}
-                resizeMode="contain"
-              />
-            </Pressable>
-            <Text style={styles.headerTitle}>{t('auth.register')}</Text>
+            <View style={styles.headerLeft}>
+              <Pressable style={styles.backButton} onPress={onBack}>
+                <Image
+                  source={require('../../assets/images/arrow_left_3x.png')}
+                  style={styles.backIcon}
+                  resizeMode="contain"
+                />
+              </Pressable>
+              <Text style={styles.headerTitle}>{t('auth.register')}</Text>
+            </View>
             <Pressable style={styles.registrationButton} onPress={onLoginPress}>
               <Image
                 source={require('../../assets/images/login_3x.png')}
@@ -189,11 +191,28 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 36,
   },
+  headerLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
   backButton: {
-    width: 32,
-    height: 32,
+    width: 37,
+    height: 37,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: colorBackground,
+    borderWidth: 1,
+    borderColor: colorBorder,
+    borderRadius: 10,
+    shadowColor: colorShadow,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 8,
+    elevation: 4,
   },
   backIcon: {
     width: 14,

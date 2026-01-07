@@ -10,6 +10,7 @@ export function RootNavigator(props: { splashDurationMs?: number }) {
   const { splashDurationMs = 1200 } = props;
   const [route, setRoute] = useState<RouteName>('Splash');
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [smsSource, setSmsSource] = useState<'login' | 'register'>('login');
 
   useEffect(() => {
     const id = setTimeout(() => {
@@ -19,8 +20,9 @@ export function RootNavigator(props: { splashDurationMs?: number }) {
     return () => clearTimeout(id);
   }, [splashDurationMs]);
 
-  const navigateToSmsVerification = (phone: string) => {
+  const navigateToSmsVerification = (phone: string, source: 'login' | 'register' = 'login') => {
     setPhoneNumber(phone);
+    setSmsSource(source);
     setRoute('SmsVerification');
   };
 
@@ -40,6 +42,7 @@ export function RootNavigator(props: { splashDurationMs?: number }) {
     return (
       <SmsVerificationScreen
         phoneNumber={phoneNumber}
+        origin={smsSource}
         onBack={navigateBack}
         onConfirm={() => {
           // Navigate to next screen after verification
@@ -53,7 +56,7 @@ export function RootNavigator(props: { splashDurationMs?: number }) {
       <RegisterScreen
         onBack={navigateBack}
         onLoginPress={navigateBack}
-        onContinue={(data) => navigateToSmsVerification(data.phoneNumber)}
+        onContinue={(data) => navigateToSmsVerification(data.phoneNumber, 'register')}
       />
     );
   }

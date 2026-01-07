@@ -6,11 +6,17 @@ import { useI18n } from '../../i18n';
 
 interface SmsVerificationScreenProps {
   phoneNumber?: string;
+  origin?: 'login' | 'register';
   onBack?: () => void;
   onConfirm?: () => void;
 }
 
-export function SmsVerificationScreen({ phoneNumber = '+7 (999) 999-99-99', onBack, onConfirm }: SmsVerificationScreenProps) {
+export function SmsVerificationScreen({
+  phoneNumber = '+7 (999) 999-99-99',
+  origin = 'login',
+  onBack,
+  onConfirm,
+}: SmsVerificationScreenProps) {
   const [code, setCode] = useState(['', '', '', '']);
   const [timer, setTimer] = useState(45);
   const inputRefs = useRef<(TextInput | null)[]>([]);
@@ -26,27 +32,32 @@ export function SmsVerificationScreen({ phoneNumber = '+7 (999) 999-99-99', onBa
   }, [timer]);
 
   const handleCodeChange = (text: string, index: number) => {
-    // Only allow numbers
-    const numericText = text.replace(/[^0-9]/g, '');
-    
-    if (numericText.length > 1) {
-      // If multiple digits, take only the last one
-      const newCode = [...code];
-      newCode[index] = numericText.slice(-1);
-      setCode(newCode);
-      
-      // Move to next input
-      if (index < 3 && inputRefs.current[index + 1]) {
-        inputRefs.current[index + 1]?.focus();
-      }
+    const numeric = text.replace(/[^0-9]/g, '');
+    const nextCode = [...code];
+
+    if (!numeric) {
+      nextCode[index] = '';
     } else {
-      const newCode = [...code];
-      newCode[index] = numericText;
-      setCode(newCode);
-      
-      // Auto-focus next input
-      if (numericText && index < 3 && inputRefs.current[index + 1]) {
-        inputRefs.current[index + 1]?.focus();
+      let cursor = index;
+      for (let i = 0; i < numeric.length && cursor < 4; i += 1) {
+        nextCode[cursor] = numeric[i];
+        cursor += 1;
+      }
+    }
+
+    setCode(nextCode);
+
+    if (numeric) {
+      const firstEmptyAfter = nextCode.findIndex((v, idx) => v === '' && idx > index);
+      if (firstEmptyAfter !== -1) {
+        inputRefs.current[firstEmptyAfter]?.focus();
+      } else if (nextCode.every((v) => v !== '')) {
+        handleConfirm();
+      } else {
+        const nextSlot = Math.min(index + numeric.length, 3);
+        if (nextCode[nextSlot] === '') {
+          inputRefs.current[nextSlot]?.focus();
+        }
       }
     }
   };
@@ -90,12 +101,15 @@ export function SmsVerificationScreen({ phoneNumber = '+7 (999) 999-99-99', onBa
         <View style={styles.card}>
           {/* Header */}
           <View style={styles.header}>
-            <Text style={styles.headerTitle}>{t('auth.login')}</Text>
+            <Text style={styles.headerTitle}>
+              {origin === 'register' ? t('auth.register') : t('auth.login')}
+            </Text>
           </View>
 
           {/* Phone number text */}
           <Text style={styles.phoneText}>
-            {t('sms.sent', { phone: phoneNumber })}
+            {t('sms.sent')} {'\n'}
+            <Text style={styles.phoneHighlight}>{phoneNumber}</Text>
           </Text>
 
           {/* Code input section */}
@@ -106,8 +120,9 @@ export function SmsVerificationScreen({ phoneNumber = '+7 (999) 999-99-99', onBa
                 {code.map((digit, index) => (
                   <TextInput
                     key={index}
-                    // ref={(ref) => (inputRefs.current[index] = ref)}
-                    ref={inputRefs.current[index] as unknown as React.RefObject<TextInput>}
+                    ref={(ref) => {
+                      inputRefs.current[index] = ref;
+                    }}
                     style={styles.codeInput}
                     value={digit}
                     onChangeText={(text) => handleCodeChange(text, index)}
@@ -227,6 +242,10 @@ const styles = StyleSheet.create({
     color: 'rgba(65, 44, 44, 0.7)',
     textAlign: 'center',
     width: 285,
+  },
+  phoneHighlight: {
+    color: colorPrimary,
+    fontWeight: '600',
   },
   codeSection: {
     width: '100%',
