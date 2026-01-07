@@ -554,7 +554,6 @@ export function WelcomeScreen() {
   const handleNext = () => {
     if (currentPage < 2) {
       const nextPage = currentPage + 1;
-      setCurrentPage(nextPage);
       scrollViewRef.current?.scrollTo({ x: nextPage * screenWidth, animated: true });
     } else {
       // Navigate to next screen (to be implemented)
